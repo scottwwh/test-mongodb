@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "db:seed": "node seed.js",
+    "db:seed": "node db-seed.js",
     "db:clone": "docker exec -i test-mongodb_mongodb_1 bash < ../mongodb/clone.sh",
     "db:index": "node db-index.js",
     "db:init": "npm run db:seed && npm run db:clone && npm run db:index"
