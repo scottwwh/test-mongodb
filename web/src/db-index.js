@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 const MONGO_HOST = 'mongodb://root:example@localhost:27017';
 const MONGO_DATABASE_INDEXED = 'test_indexed';
 
-const MONGO_COLLECTION_CATS = 'cats_indexed';
+const MONGO_COLLECTION_CATS = 'indexed_cats';
 const MONGO_COLLECTIONS = {
     cats: MONGO_COLLECTION_CATS
 };

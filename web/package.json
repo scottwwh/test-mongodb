@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha src/test/*",
-    "start": "node index.js",
+    "start": "node src/index.js",
     "db:seed": "node src/db-seed.js",
     "db:clone": "docker exec -i test-mongodb_mongodb_1 bash < ../mongodb/clone.sh",
     "db:index": "node src/db-index.js",
@@ -18,7 +18,8 @@
     "@koa/router": "^12.0.0",
     "faker": "^6.6.6",
     "koa": "^2.13.4",
-    "mongodb": "^4.8.1"
+    "mongodb": "^4.8.1",
+    "mongoose": "^6.5.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
