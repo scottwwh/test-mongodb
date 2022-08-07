@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha src/test/*",
     "start": "node index.js",
     "db:seed": "node src/db-seed.js",
     "db:clone": "docker exec -i test-mongodb_mongodb_1 bash < ../mongodb/clone.sh",
@@ -21,6 +21,7 @@
     "mongodb": "^4.8.1"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.3.0"
+    "@faker-js/faker": "^7.3.0",
+    "mocha": "^10.0.0"
   }
 }
