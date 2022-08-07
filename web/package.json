@@ -7,9 +7,9 @@
   "scripts": {
     "test": "mocha src/test/*",
     "start": "node src/index.js",
-    "db:seed": "node src/db-seed.js",
+    "db:seed": "node src/db/seed.js",
     "db:clone": "docker exec -i test-mongodb_mongodb_1 bash < ../mongodb/clone.sh",
-    "db:index": "node src/db-index.js",
+    "db:index": "node src/db/add_indexes.js",
     "db:init": "npm run db:seed && npm run db:clone && npm run db:index"
   },
   "author": "",
