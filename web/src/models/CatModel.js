@@ -3,7 +3,10 @@ const { Schema } = mongoose;
 
 const catSchema = new Schema({
   events: Schema.Types.Mixed,
-  ownerId: Schema.Types.ObjectId,
+  ownerId: {
+    type: Schema.Types.ObjectId,
+    ref: "Owner"
+  },
   breederId: Schema.Types.ObjectId,
   timestamp_day: Date,
   cat: String
