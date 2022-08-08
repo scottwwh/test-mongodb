@@ -11,7 +11,7 @@
     "db:export": "docker exec -i test-mongodb_mongo-a_1 bash < ../mongodb/export.sh",
     "db:import": "docker exec -i test-mongodb_mongo-b_1 bash < ../mongodb/import.sh",
     "db:index": "node src/db/add_indexes.js",
-    "db:init": "npm run db:seed && npm run db:clone && npm run db:index"
+    "db:init": "npm run db:seed && npm run db:export && npm run db:import && npm run db:index"
   },
   "author": "",
   "license": "ISC",
