@@ -1,16 +1,16 @@
 import { MongoClient } from 'mongodb';
 
-const MONGO_HOST = 'mongodb://root:example@localhost:27017';
-const MONGO_DATABASE_INDEXED = 'test_indexed';
+const MONGO_HOST_B = 'mongodb://root:example@localhost:27018';
+const MONGO_DATABASE_INDEXED = 'test';
 
-const MONGO_COLLECTION_CATS = 'indexed_cats';
+const MONGO_COLLECTION_CATS = 'cats';
 const MONGO_COLLECTIONS = {
     cats: MONGO_COLLECTION_CATS
 };
 
 async function indexDB() {
     // Connection URL
-    const uri = MONGO_HOST;
+    const uri = MONGO_HOST_B;
 
     const client = new MongoClient(uri, {
         useNewUrlParser: true,

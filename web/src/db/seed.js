@@ -10,8 +10,9 @@ function randomIntFromInterval(min, max) { // min and max included
 
 // Move to Config helper
 const MONGO_HOST = 'mongodb://root:example@localhost:27017';
+const MONGO_HOST_B = 'mongodb://root:example@localhost:27018';
+
 const MONGO_DATABASE_CONTROL = 'test';
-const MONGO_DATABASE_INDEXED = 'test_indexed';
 
 const MONGO_COLLECTION_BREEDERS = 'breeders';
 const MONGO_COLLECTION_OWNERS = 'owners';
@@ -29,13 +30,19 @@ async function initDB() {
         // useUnifiedTopology: true,
     });
 
+    const clientB = new MongoClient(MONGO_HOST_B, {
+        useNewUrlParser: true,
+        // useUnifiedTopology: true,
+    });
+
     try {
         await client.connect();
-        console.log('Connection created');
+        await clientB.connect();
+        console.log('Connections created');
 
         // Reset databases
         await client.db(MONGO_DATABASE_CONTROL).dropDatabase();
-        await client.db(MONGO_DATABASE_INDEXED).dropDatabase();
+        await clientB.db(MONGO_DATABASE_CONTROL).dropDatabase();
 
         // Test document to ensure collection appears
         const document = {
@@ -55,6 +62,7 @@ async function initDB() {
         });
 
         client.close();
+        clientB.close();
 
     } catch (err) {
         console.log('Error:', err);
@@ -123,7 +131,7 @@ async function seedDB() {
         collection.drop();
 
 
-        const CATS_BATCH_NUM = 10;
+        const CATS_BATCH_NUM = 2;
         const CATS_BATCH_SIZE = 100000;
 
         // Thousands

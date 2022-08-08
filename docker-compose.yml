@@ -2,11 +2,24 @@ version: "3.9"
 
 services:
 
-  mongodb:
+  mongo-a:
     image: mongo
     restart: always
+    volumes:
+      - ./mongodb/:/opt/
     ports:
       - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-b:
+    image: mongo
+    restart: always
+    volumes:
+      - ./mongodb/:/opt/
+    ports:
+      - 27018:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -15,4 +28,5 @@ services:
     build: ./web/ # Exclude when deployed
     restart: on-failure
     depends_on:
-      - "mongodb"
+      - "mongo-a"
+      - "mongo-b"
