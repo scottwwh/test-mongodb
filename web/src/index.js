@@ -56,8 +56,16 @@ router.get('/', list)
 // Display home page
 async function list(ctx) {
 //   const file = path.join(webRoot, 'index.html')
-  ctx.response.type = 'text/plain';
-  ctx.response.body = "foo";
+  ctx.response.type = 'text/html';
+  ctx.response.body = `
+  <html>
+    <div style="text-align: center">
+      <h1>This page does nothing yet!</h1>
+      <p>Interactive test results are out of scope - check the README :)</p>
+    </div>
+  </html>
+`;
+  
 };
 
 // // Get data for specific user
