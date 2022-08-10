@@ -18,9 +18,6 @@ const SETS = [
 ];
 
 
-const results = {};
-
-
 // May be risky because it doesn't enforce set, or maybe this doesn't need to be a function?
 async function runTest(Model, filter) {
     const ts = new Date();
@@ -42,66 +39,66 @@ async function runTest(Model, filter) {
 /**
  * SAMPLE SET
  * 
- * At the moment, I need to manually update these values which is crazy.. so gotta fix this!
+ * Ideally, I'd randomly select ~10 cats (for their breeders and owners) and then iterate through that list as well
  * 
- * Ideally, I'd randomly select ~10 breeders and owners, and do something fancy?
- * 
- * What's super interestins is that when both of these are used,
- * we only get a few results yet the indexed database is ~95% faster?
+ * Note: When our query filters include two fields but but results (~10), the indexed database is ~95% faster?
  */
 
-import CatModel from './models/CatModel.js';
-
-const breederId = "62f2e2a741732eb268e4d5bc";
-const ownerId = "62f2e2a841732eb268e4d766";
-const catName = "Incubate";
-
-
 const filter = {
-    breederId: breederId,
-    ownerId: ownerId
+    breederId: null,
+    ownerId: null
     // cat: catName
 };
 
+import CatModel from './models/CatModel.js';
 
-// const cats = await CatModel.find({});
-// console.log('Cats?', cats);
+async function generateResults(runs) {
+    const results = {};
+
+    for (var i = 0; i < SETS.length; i++) {
+        try {
+            const host = SETS[i].host;
+            const id = SETS[i].id;
+
+            const db = await mongoose.connect(host, {
+                user: "root",
+                pass: "example",
+                dbName: MONGO_DATABASE
+            });
 
 
-for (var i = 0; i < SETS.length; i++) {
-    try {
-        const host = SETS[i].host;
-        const id = SETS[i].id;
+            // Get record(s) from the first host/database only (documents are identical)
+            if (i == 0) {
+                const cat = await CatModel.findOne();
+                // console.log('Cats?', cat);
 
-        const db = await mongoose.connect(host, {
-          user: "root",
-          pass: "example",
-          dbName: MONGO_DATABASE
-        });
-        
-        for (var j = 0; j < 20; j++) {
-            const data = await runTest(CatModel, filter);
-
-            // Create array if missing
-            if (!results[id]) {
-                results[id] = [];
+                filter.breederId = cat.breederId;
+                filter.ownerId = cat.ownerId;
             }
 
-            results[id].push(data);
+            
+            for (var j = 0; j < runs; j++) {
+                const data = await runTest(CatModel, filter);
+
+                // Create array if missing
+                if (!results[id]) {
+                    results[id] = [];
+                }
+
+                results[id].push(data);
+            }
+            
+            mongoose.disconnect();
+        } catch (err) {
+            console.log(err);
         }
-        
-        mongoose.disconnect();
-      } catch (err) {
-        console.log(err);
-      }
+    }
+    
+    return results;
 }
 
 
-// REPORTING
-// console.log('RESULTS!', results);
-
-// This should be higher in the file
-const RUNS = 50;
+// REPORTING - this should be in the our tests!
 
 function summarize(arr) {
     let total = 0;
@@ -117,12 +114,22 @@ function summarize(arr) {
 }
 
 
+// This could be used to test short-term caching behaviour (where more duplicate reads leads to fast response times?)
+const RUNS = 50;
+const results = await generateResults(RUNS);
+// console.log('RESULTS!', results);
+
+
 const summaryDefault = summarize(results['default']);
 const summaryIndexed = summarize(results['indexed']);
 
 const improvement = Math.round((1 - (summaryIndexed.average / summaryDefault.average)) * 100);
 const msg = `
 # Results
+
+Filter:
+- Breeder: ${filter.breederId}
+- Owner: ${filter.ownerId}
 
 Reporting on ${summaryDefault.results}
 Average (default): ${summaryDefault.average} ms 
