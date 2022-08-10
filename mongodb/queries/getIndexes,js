@@ -1,0 +1,7 @@
+db.getCollectionNames().forEach(name => {
+    const collection = db.getCollection(name);
+    const indexes = collection.getIndexes();
+    indexes.forEach(index => {
+        console.log(name, index);
+    })
+});

@@ -6,7 +6,7 @@ services:
     image: mongo
     restart: always
     volumes:
-      - ./mongodb/:/opt/
+      - ./mongodb/:/opt/ # Shared by Mongo containers to support export/import
     ports:
       - 27017:27017
     environment:
@@ -17,7 +17,7 @@ services:
     image: mongo
     restart: always
     volumes:
-      - ./mongodb/:/opt/
+      - ./mongodb/:/opt/ # Shared by Mongo containers to support export/import
     ports:
       - 27018:27017
     environment:
